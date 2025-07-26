@@ -1,0 +1,9 @@
+{
+  "credential": "email",
+  "email": "email",
+  "PHONE_NUMBER": "phone_number",
+  "password": "password",
+  "NOT_EMPTY": "$t(validation.{property}) نباید خالی باشد",
+  "INVALID_EMAIL": "ایمیل معبر نیست",
+  "INVALID_PHONE_NUMBER": "شماره همراه معتبر نیست"
+}

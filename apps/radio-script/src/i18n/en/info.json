@@ -1,0 +1,8 @@
+{
+  "OTP_SENT": "One-time password sent",
+  "CONFIRM_CODE_SENT": "Confirmation code sent",
+  "PROFILE_UPDATED": "Profile updated successfully",
+  "PROFILE_AVATAR_UPDATED": "Profile avatar updated successfully",
+  "PROFILE_AVATAR_DELETED": "Profile avatar deleted successfully",
+  "ACCOUNT_DELETED": "Account deleted successfully"
+}

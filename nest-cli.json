@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "webpack": true,
+    "assets": ["i18n/**/*"]
+  }
+}
