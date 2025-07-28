@@ -8,12 +8,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { memoryStorage } from 'multer';
 import { MediaService } from './media.service';
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+
 @Controller('media')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -36,6 +37,8 @@ export class MediaController {
     return this.mediaService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.mediaService.remove(id);
