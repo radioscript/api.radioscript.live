@@ -1,11 +1,13 @@
 import { CommentQueryDto } from '@/dtos';
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { JwtAuthGuard } from '@/guards';
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { CommentService } from './comments.service';
 
 @Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() body: { content: string; authorId: string; postId: string }) {
     return this.commentService.create(body.content, body.authorId, body.postId);
@@ -21,6 +23,7 @@ export class CommentController {
     return this.commentService.findAllByPost(postId, query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.commentService.remove(id);
