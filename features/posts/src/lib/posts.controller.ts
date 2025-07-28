@@ -7,13 +7,13 @@ import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch
 import { Request } from 'express';
 import { PostService } from './posts.service';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Post()
   create(@Req() req: Request, @Body() dto: CreatePostDto) {
     return this.postService.create(req, dto);
@@ -29,11 +29,15 @@ export class PostController {
     return this.postService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     return this.postService.update(id, dto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postService.remove(id);
