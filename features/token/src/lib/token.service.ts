@@ -114,11 +114,16 @@ export class TokenService {
   }
 
   async revokeTokenByRequest(req: Request): Promise<DeleteResult> {
-    const token = this.extractToken(req);
-    const record = await this.tokenRepo.findOne({
-      where: { access_token: token },
-    });
-    return this.tokenRepo.delete(record?.id);
+    const authHeader = req?.headers['authorization'];
+    const [token] = authHeader?.split(' ') || [];
+
+    if (token) {
+      const record = await this.tokenRepo.findOne({
+        where: { access_token: token },
+      });
+      return this.tokenRepo.delete(record?.id);
+    }
+    return;
   }
 
   async revokeToken(token: string): Promise<void> {
@@ -187,6 +192,7 @@ export class TokenService {
     if (!authHeader) {
       throw new UnauthorizedException('error.ACCESS_TOKEN_NOT_FOUND');
     }
+
     const [type, token] = authHeader.split(' ');
     if (type !== 'Bearer' || !token) {
       throw new UnauthorizedException('error.ACCESS_TOKEN_NOT_FOUND');
