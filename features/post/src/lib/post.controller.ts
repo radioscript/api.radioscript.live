@@ -8,12 +8,12 @@ import { Request } from 'express';
 import { PostService } from './post.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Post()
   create(@Req() req: Request, @Body() dto: CreatePostDto) {
     return this.postService.create(req, dto);
@@ -29,11 +29,13 @@ export class PostController {
     return this.postService.findOne(id);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     return this.postService.update(id, dto);
   }
 
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postService.remove(id);
