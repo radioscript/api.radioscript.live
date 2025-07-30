@@ -19,7 +19,7 @@ export class MediaController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: memoryStorage(),
-      limits: { fileSize: 100 * 1024 * 1024 }, // حداکثر 100 مگابایت
+      limits: { fileSize: 100 * 1024 * 1024 }, // Maximum 100mb
     })
   )
   upload(@Req() req: Request, @UploadedFile() file: Express.Multer.File) {
