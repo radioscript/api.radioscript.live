@@ -1,6 +1,6 @@
 import { Token, User } from '@/entities';
 import { DeviceInfo } from '@/interfaces';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,7 +20,8 @@ export class TokenService {
     private readonly userRepo: Repository<User>,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    private readonly i18n: I18nService
+    private readonly i18n: I18nService,
+    private readonly logger: Logger
   ) {
     this.jwtSecretKey = this.configService.getOrThrow<string>('JWT_SECRET_KEY');
   }
@@ -100,6 +101,7 @@ export class TokenService {
     });
 
     if (!tokenRecord) {
+      this.logger.error('Token not found', { token, payload });
       throw new UnauthorizedException('error.ACCESS_TOKEN_NOT_FOUND');
     }
     if (tokenRecord.access_token_expiration < new Date()) {
