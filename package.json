@@ -5,7 +5,13 @@
   "scripts": {
     "start": "npx nx run radio-script:serve --configuration=development --watch=true",
     "start:debug": "npx nx run radio-script:serve --inspect=true --watch=true --configuration=development",
-    "build": "npx nx run radio-script:build "
+    "build": "npx nx run radio-script:build ",
+    "docker:up": "cd apps/radio-script && docker-compose up -d",
+    "docker:down": "cd apps/radio-script && docker-compose down",
+    "docker:logs": "cd apps/radio-script && docker-compose logs -f",
+    "docker:rebuild": "cd apps/radio-script && docker-compose up -d --build",
+    "docker:restart": "cd apps/radio-script && docker-compose restart",
+    "docker:status": "cd apps/radio-script && docker-compose ps"
   },
   "private": true,
   "dependencies": {
