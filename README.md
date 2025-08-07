@@ -52,6 +52,113 @@ npm run start
 
 This will run the radio-script app with live reload enabled.
 
+### Starting with Docker
+
+The project includes Docker Compose configurations for easy development and deployment.
+
+#### Prerequisites
+
+- Docker
+- Docker Compose
+
+#### Quick Start
+
+1. **Start the API only:**
+
+   ```bash
+   npm run docker:up
+   ```
+
+2. **Start PostgreSQL database only:**
+
+   ```bash
+   npm run docker:postgres:up
+   ```
+
+3. **Start both services:**
+   ```bash
+   npm run docker:postgres:up
+   npm run docker:up
+   ```
+
+#### Available Docker Commands
+
+**Radio Script API:**
+
+```bash
+npm run docker:up          # Start the API
+npm run docker:down        # Stop the API
+npm run docker:logs        # View API logs
+npm run docker:rebuild     # Rebuild and start
+npm run docker:status      # Check API status
+```
+
+**PostgreSQL Database:**
+
+```bash
+npm run docker:postgres:up      # Start PostgreSQL
+npm run docker:postgres:down    # Stop PostgreSQL
+npm run docker:postgres:logs    # View database logs
+npm run docker:postgres:status  # Check database status
+```
+
+#### Access Points
+
+- **API**: http://localhost:3001/api/v1
+- **Health Check**: http://localhost:3001/api/v1/health
+- **Database**: localhost:5432
+
+#### Environment Configuration
+
+The Docker setup uses `.env.development` file in `apps/radio-script/`. Key variables:
+
+```env
+# Database Configuration
+DATABASE_HOST=postgres  # or localhost if running separately
+DATABASE_PORT=5432
+DATABASE_NAME=radio_script
+DATABASE_USER=postgres
+DATABASE_PASSWORD=password
+
+# App Configuration
+APP_PORT=3001
+NODE_ENV=development
+```
+
+#### Development Scenarios
+
+**Scenario 1: API with Container Database**
+
+```bash
+# Start PostgreSQL
+npm run docker:postgres:up
+
+# Start API (connects to container database)
+npm run docker:up
+```
+
+**Scenario 2: API with Local Database**
+
+```bash
+# Start PostgreSQL
+npm run docker:postgres:up
+
+# Update .env.development: DATABASE_HOST=localhost
+
+# Start API (connects to local database)
+npm run docker:up
+```
+
+**Scenario 3: API Only (External Database)**
+
+```bash
+# Configure .env.development with external database credentials
+# Start API only
+npm run docker:up
+```
+
+For detailed Docker documentation, see [apps/radio-script/README.md](apps/radio-script/README.md).
+
 ### Debugging
 
 To start the application in debug mode:
