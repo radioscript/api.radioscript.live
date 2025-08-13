@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsEmail, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -12,7 +12,15 @@ export class UpdateUserDto {
 
   @IsString()
   @IsOptional()
+  avatar_url?: string;
+
+  @IsString()
+  @IsOptional()
   first_name?: string;
+
+  @IsString()
+  @IsOptional()
+  bio?: string;
 
   @IsString()
   @IsOptional()
@@ -25,4 +33,16 @@ export class UpdateUserDto {
   @IsPhoneNumber()
   @IsOptional()
   phone_number?: string;
+
+  @IsString()
+  @IsOptional()
+  role?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  blocked?: boolean;
+
+  @IsString()
+  @IsOptional()
+  block_reason?: string;
 }

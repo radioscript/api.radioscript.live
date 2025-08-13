@@ -242,7 +242,6 @@ The application requires certain environment variables to be set. Use the .env f
 
 Example .env file:
 
-DATABASE_URL=postgres://user:password@localhost:5432/database
 JWT_SECRET=your-secret-key
 AWS_ACCESS_KEY_ID=your-access-key
 AWS_SECRET_ACCESS_KEY=your-secret-key

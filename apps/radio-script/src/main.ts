@@ -62,7 +62,6 @@ async function bootstrap() {
     },
     credentials: true,
   });
-
   setupSwagger(app);
 
   await app.listen(port);

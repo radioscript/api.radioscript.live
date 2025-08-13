@@ -26,8 +26,8 @@ import { AppService } from './app.service';
   imports: [
     AuthModule,
     CategoryModule,
-    CommentModule,
     DatabaseModule,
+    CommentModule,
     EnvironmentModule,
     HealthModule,
     MailModule,
