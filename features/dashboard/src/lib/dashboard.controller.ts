@@ -10,7 +10,7 @@ import { DashboardService } from './dashboard.service';
 export class DashboardController {
   constructor(private dashboardService: DashboardService) {}
 
-  @Get()
+  @Get('stats')
   getDashboardData() {
     return this.dashboardService.getDashboardData();
   }
