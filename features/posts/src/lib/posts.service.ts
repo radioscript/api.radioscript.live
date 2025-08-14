@@ -108,4 +108,13 @@ export class PostService {
   async count(): Promise<number> {
     return await this.postRepo.count();
   }
+  async podcastCount(): Promise<number> {
+    return await this.postRepo.count({ where: { type: 'podcast' } });
+  }
+  async videoCount(): Promise<number> {
+    return await this.postRepo.count({ where: { type: 'video' } });
+  }
+  async articleCount(): Promise<number> {
+    return await this.postRepo.count({ where: { type: 'post' } });
+  }
 }

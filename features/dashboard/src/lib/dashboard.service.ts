@@ -10,6 +10,9 @@ export class DashboardService {
   async getDashboardData() {
     const totalUsers = await this.userService.count();
     const totalPosts = await this.postService.count();
+    const totalPodcasts = await this.postService.podcastCount();
+    const totalVideos = await this.postService.videoCount();
+    const totalArticles = await this.postService.articleCount();
     const totalComments = await this.commentService.count();
     const totalPendingComments = await this.commentService.pendingCount();
     const totalApprovedComments = await this.commentService.approvedCount();
@@ -17,6 +20,9 @@ export class DashboardService {
     return {
       totalUsers,
       totalPosts,
+      totalPodcasts,
+      totalVideos,
+      totalArticles,
       totalComments,
       totalPendingComments,
       totalApprovedComments,
