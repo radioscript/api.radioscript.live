@@ -104,4 +104,8 @@ export class PostService {
     const post = await this.findOne(id);
     return this.postRepo.softRemove(post);
   }
+
+  async count(): Promise<number> {
+    return await this.postRepo.count();
+  }
 }

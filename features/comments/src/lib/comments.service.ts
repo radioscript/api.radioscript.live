@@ -79,4 +79,17 @@ export class CommentService {
     if (!comment) throw new NotFoundException('Comment not found');
     return this.commentRepo.softRemove(comment);
   }
+
+  async count(): Promise<number> {
+    return await this.commentRepo.count();
+  }
+  async pendingCount(): Promise<number> {
+    return await this.commentRepo.count({ where: { status: 'pending' } });
+  }
+  async approvedCount(): Promise<number> {
+    return await this.commentRepo.count({ where: { status: 'approved' } });
+  }
+  async spamCount(): Promise<number> {
+    return await this.commentRepo.count({ where: { status: 'spam' } });
+  }
 }

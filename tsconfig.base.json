@@ -27,21 +27,22 @@
       "@/environments": ["libs/environments/src/index.ts"],
       "@/filters": ["libs/filters/src/index.ts"],
       "@/guards": ["libs/guards/src/index.ts"],
+      "@/health": ["features/health/src/index.ts"],
       "@/helpers": ["libs/helpers/src/index.ts"],
       "@/interceptors": ["libs/interceptors/src/index.ts"],
       "@/interfaces": ["libs/interfaces/src/index.ts"],
       "@/mail": ["features/mail/src/index.ts"],
       "@/media": ["features/media/src/index.ts"],
       "@/otp": ["features/otp/src/index.ts"],
-      "@/posts": ["features/posts/src/index.ts"],
       "@/post-meta": ["features/post-meta/src/index.ts"],
+      "@/posts": ["features/posts/src/index.ts"],
       "@/sms": ["features/sms/src/index.ts"],
       "@/strategies": ["libs/strategies/src/index.ts"],
       "@/tags": ["features/tags/src/index.ts"],
       "@/token": ["features/token/src/index.ts"],
       "@/types": ["libs/types/src/index.ts"],
       "@/users": ["features/users/src/index.ts"],
-      "@/health": ["features/health/src/index.ts"]
+      "@/dashboard": ["features/dashboard/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
