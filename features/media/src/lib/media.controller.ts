@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 
-import { Roles } from '@/decorators';
+import { Permissions, Roles } from '@/decorators';
 import { MediaQueryDto } from '@/dtos';
 import { UserRole } from '@/enums';
 import { JwtAuthGuard, RolesGuard } from '@/guards';
@@ -14,7 +14,8 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, 'editor')
+  @Permissions('media.create')
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -28,17 +29,20 @@ export class MediaController {
   }
 
   @Get()
+  @Permissions('media.read')
   findAll(@Query() query: MediaQueryDto) {
     return this.mediaService.findAll(query);
   }
 
   @Get(':id')
+  @Permissions('media.read')
   findOne(@Param('id') id: string) {
     return this.mediaService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Permissions('media.delete')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.mediaService.remove(id);
