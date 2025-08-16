@@ -28,10 +28,11 @@ export class TagController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
-  @Put('recover/:id')
+  @Put(':id')
   recover(@Param('id') id: string) {
     return this.tagService.recover(id);
   }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @Get('deleted')
