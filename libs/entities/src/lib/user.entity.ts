@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, Index, OneToMany } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 
 import { UserRole } from '@/enums';
 import { Exclude } from 'class-transformer';
@@ -6,6 +6,7 @@ import { BaseEntity } from './base.entity';
 import { Comment } from './comment.entity';
 import { Media } from './media.entity';
 import { Post } from './post.entity';
+import { Role } from './role.entity';
 import { Token } from './token.entity';
 
 @Entity()
@@ -44,6 +45,14 @@ export class User extends BaseEntity {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable({
+    name: 'user_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: Role[];
 
   @Exclude()
   @OneToMany(() => Token, (token) => token.user)

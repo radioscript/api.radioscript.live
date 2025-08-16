@@ -1,7 +1,8 @@
-import { Category, Comment, Media, Otp, Post, PostMeta, Tag, Token, User } from '@/entities';
+import { Category, Comment, Media, Otp, Permission, Post, PostMeta, Role, Tag, Token, User } from '@/entities';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SeedService } from './seed.service';
 
 @Module({
   imports: [
@@ -15,14 +16,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.getOrThrow<string>('DATABASE_USER'),
         password: configService.getOrThrow<string>('DATABASE_PASSWORD'),
         database: configService.getOrThrow<string>('DATABASE_NAME'),
-        entities: [User, Token, Media, Otp, Post, PostMeta, Category, Tag, Comment],
+        entities: [User, Token, Media, Otp, Post, PostMeta, Category, Tag, Comment, Role, Permission],
         synchronize: true,
         migrationsRun: true,
       }),
     }),
+    TypeOrmModule.forFeature([Role, Permission]),
   ],
   controllers: [],
-  providers: [],
+  providers: [SeedService],
   exports: [],
 })
 export class DatabaseModule {}

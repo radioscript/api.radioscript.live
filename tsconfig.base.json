@@ -36,6 +36,7 @@
       "@/otp": ["features/otp/src/index.ts"],
       "@/post-meta": ["features/post-meta/src/index.ts"],
       "@/posts": ["features/posts/src/index.ts"],
+      "@/roles": ["features/roles/src/index.ts"],
       "@/sms": ["features/sms/src/index.ts"],
       "@/strategies": ["libs/strategies/src/index.ts"],
       "@/tags": ["features/tags/src/index.ts"],
