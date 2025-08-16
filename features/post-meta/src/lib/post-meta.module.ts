@@ -1,14 +1,16 @@
-import { Post, PostMeta, User } from '@/entities';
+import { Permission, Post, PostMeta, Role, User } from '@/entities';
+import { JwtAuthGuard, RolesGuard } from '@/guards';
 import { TokenModule } from '@/token';
 import { Module } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostMetaController } from './post-meta.controller';
 import { PostMetaService } from './post-meta.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PostMeta, Post, User]), TokenModule],
+  imports: [TypeOrmModule.forFeature([PostMeta, Post, User, Role, Permission]), TokenModule],
   controllers: [PostMetaController],
-  providers: [PostMetaService],
+  providers: [PostMetaService, JwtAuthGuard, RolesGuard, JwtService],
   exports: [PostMetaService],
 })
 export class PostMetaModule {}
