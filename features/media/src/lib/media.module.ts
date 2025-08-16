@@ -1,4 +1,4 @@
-import { Media, User } from '@/entities';
+import { Media, Permission, Role, User } from '@/entities';
 import { JwtAuthGuard, RolesGuard } from '@/guards';
 import { S3Service } from '@/helpers';
 import { TokenModule } from '@/token';
@@ -9,7 +9,7 @@ import { MediaController } from './media.controller';
 import { MediaService } from './media.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Media, User]), TokenModule],
+  imports: [TypeOrmModule.forFeature([Media, User, Role, Permission]), TokenModule],
   controllers: [MediaController],
   providers: [MediaService, S3Service, JwtAuthGuard, RolesGuard, JwtService],
   exports: [MediaService],

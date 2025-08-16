@@ -1,5 +1,5 @@
 // src/posts/post.controller.ts
-import { Roles } from '@/decorators';
+import { Permissions, Roles } from '@/decorators';
 import { CreatePostDto, PostQueryDto, UpdatePostDto } from '@/dtos';
 import { UserRole } from '@/enums';
 import { JwtAuthGuard, RolesGuard } from '@/guards';
@@ -13,24 +13,28 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.EDITOR)
+  @Permissions('posts.create')
   @Post()
   create(@Req() req: Request, @Body() dto: CreatePostDto) {
     return this.postService.create(req, dto);
   }
 
   @Get()
+  @Permissions('posts.read')
   findAll(@Query() query: PostQueryDto) {
     return this.postService.findAll(query);
   }
 
   @Get(':id')
+  @Permissions('posts.read')
   findOne(@Param('id') id: string) {
     return this.postService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.EDITOR)
+  @Permissions('posts.update')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePostDto) {
     return this.postService.update(id, dto);
@@ -38,6 +42,7 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Permissions('posts.delete')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postService.remove(id);

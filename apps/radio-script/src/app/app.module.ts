@@ -11,6 +11,7 @@ import { MediaModule } from '@/media';
 import { OtpModule } from '@/otp';
 import { PostMetaModule } from '@/post-meta';
 import { PostModule } from '@/posts';
+import { RolesModule } from '@/roles';
 import { SmsModule } from '@/sms';
 import { TagModule } from '@/tags';
 import { TokenModule } from '@/token';
@@ -36,6 +37,7 @@ import { AppService } from './app.service';
     OtpModule,
     PostModule,
     PostMetaModule,
+    RolesModule,
     SmsModule,
     TagModule,
     TokenModule,

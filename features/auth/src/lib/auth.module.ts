@@ -1,4 +1,4 @@
-import { User } from '@/entities';
+import { Permission, Role, User } from '@/entities';
 import { JwtAuthGuard, RolesGuard } from '@/guards';
 import { CookieService, EncryptionService, S3Service } from '@/helpers';
 import { DeviceInterceptor } from '@/interceptors';
@@ -15,7 +15,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
-  imports: [UserModule, PassportModule, SmsModule, TokenModule, OtpModule, TypeOrmModule.forFeature([User])],
+  imports: [UserModule, PassportModule, SmsModule, TokenModule, OtpModule, TypeOrmModule.forFeature([User, Role, Permission])],
 
   controllers: [AuthController],
   providers: [AuthService, EncryptionService, DeviceInterceptor, JwtService, RolesGuard, JwtAuthGuard, S3Service, CookieService, JwtStrategy, RefreshTokenStrategy, GoogleStrategy, GithubStrategy],
