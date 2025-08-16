@@ -1,9 +1,9 @@
-import { CommentQueryDto } from '@/dtos';
-import { Comment, Post, User } from '@/entities';
-import { PaginateResponse } from '@/interfaces';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, ILike, Repository } from 'typeorm';
+import { CommentQueryDto } from "@/dtos";
+import { Comment, Post, User } from "@/entities";
+import { PaginateResponse } from "@/interfaces";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { FindOptionsWhere, ILike, Repository } from "typeorm";
 
 @Injectable()
 export class CommentService {
@@ -20,6 +20,12 @@ export class CommentService {
     comment.post = await this.postRepo.findOneByOrFail({ id: postId });
 
     return this.commentRepo.save(comment);
+  }
+
+  async findOne(id: string): Promise<Comment> {
+    const comment = await this.commentRepo.findOne({ where: { id } });
+    if (!comment) throw new NotFoundException("Comment not found");
+    return comment;
   }
 
   async findAll(query: CommentQueryDto): Promise<PaginateResponse<Comment[]>> {
@@ -44,7 +50,7 @@ export class CommentService {
 
     const [data, total] = await this.commentRepo.findAndCount({
       where: whereConditions.length ? whereConditions : undefined,
-      order: { created_at: 'DESC' },
+      order: { created_at: "DESC" },
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -68,7 +74,7 @@ export class CommentService {
     }
     return this.commentRepo.find({
       where: { post: { id: postId, ...whereConditions } },
-      order: { created_at: 'DESC' },
+      order: { created_at: "DESC" },
       skip: (page - 1) * limit,
       take: limit,
     });
@@ -76,7 +82,7 @@ export class CommentService {
 
   async remove(id: string) {
     const comment = await this.commentRepo.findOneBy({ id });
-    if (!comment) throw new NotFoundException('Comment not found');
+    if (!comment) throw new NotFoundException("Comment not found");
     return this.commentRepo.softRemove(comment);
   }
 
@@ -84,12 +90,12 @@ export class CommentService {
     return await this.commentRepo.count();
   }
   async pendingCount(): Promise<number> {
-    return await this.commentRepo.count({ where: { status: 'pending' } });
+    return await this.commentRepo.count({ where: { status: "pending" } });
   }
   async approvedCount(): Promise<number> {
-    return await this.commentRepo.count({ where: { status: 'approved' } });
+    return await this.commentRepo.count({ where: { status: "approved" } });
   }
   async spamCount(): Promise<number> {
-    return await this.commentRepo.count({ where: { status: 'spam' } });
+    return await this.commentRepo.count({ where: { status: "spam" } });
   }
 }
