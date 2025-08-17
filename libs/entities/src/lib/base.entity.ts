@@ -18,11 +18,11 @@ export abstract class BaseEntity extends TypeORMBaseEntity {
   @BeforeInsert()
   updateTimestampsOnInsert() {
     this.created_at = new Date();
-    this.created_at = new Date();
+    this.updated_at = new Date();
   }
 
   @BeforeUpdate()
   updateTimestampsOnUpdate() {
-    this.created_at = new Date();
+    this.updated_at = new Date();
   }
 }
