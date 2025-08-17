@@ -1,6 +1,6 @@
 // src/post-meta/post-meta.service.ts
 import { CreatePostMetaDto, PostMetaQueryDto, UpdatePostMetaDto } from '@/dtos';
-import { Post, PostMeta } from '@/entities';
+import { Meta, Post, PostMeta } from '@/entities';
 import { PaginateResponse } from '@/interfaces';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,11 +8,24 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class PostMetaService {
-  constructor(@InjectRepository(PostMeta) private readonly metaRepo: Repository<PostMeta>, @InjectRepository(Post) private readonly postRepo: Repository<Post>) {}
+  constructor(
+    @InjectRepository(PostMeta) private readonly metaRepo: Repository<PostMeta>,
+    @InjectRepository(Post) private readonly postRepo: Repository<Post>,
+    @InjectRepository(Meta) private readonly metaDefRepo: Repository<Meta>
+  ) {}
 
   async create(dto: CreatePostMetaDto): Promise<PostMeta> {
     const post = await this.postRepo.findOneByOrFail({ id: dto.postId });
-    const meta = this.metaRepo.create({ key: dto.key, value: dto.value, post });
+    const metaDef = await this.metaDefRepo.findOneByOrFail({ id: dto.metaId });
+
+    const meta = this.metaRepo.create({
+      postId: dto.postId,
+      metaId: dto.metaId,
+      value: dto.value,
+      post,
+      meta: metaDef,
+    });
+
     return this.metaRepo.save(meta);
   }
 
@@ -21,7 +34,7 @@ export class PostMetaService {
     const whereConditions: FindOptionsWhere<PostMeta>[] = [];
 
     if (key) {
-      whereConditions.push({ key });
+      whereConditions.push({ meta: { key } });
     }
 
     if (value) {
@@ -30,6 +43,7 @@ export class PostMetaService {
 
     const [data, total] = await this.metaRepo.findAndCount({
       where: whereConditions.length ? whereConditions : undefined,
+      relations: ['meta', 'post'],
       order: { created_at: 'DESC' },
       skip: (page - 1) * limit,
       take: limit,
@@ -39,7 +53,10 @@ export class PostMetaService {
   }
 
   async findByPostId(postId: string): Promise<PostMeta[]> {
-    return this.metaRepo.find({ where: { post: { id: postId } } });
+    return this.metaRepo.find({
+      where: { postId },
+      relations: ['meta', 'post'],
+    });
   }
 
   async update(id: string, dto: UpdatePostMetaDto): Promise<PostMeta> {

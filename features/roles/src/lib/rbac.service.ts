@@ -1,3 +1,4 @@
+import { CacheService } from '@/cache';
 import { Permission, Role, User } from '@/entities';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,7 +14,8 @@ export class RbacService {
     private readonly permissionRepository: Repository<Permission>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly i18n: I18nService
+    private readonly i18n: I18nService,
+    private readonly cacheService: CacheService
   ) {}
 
   // Role Management
@@ -188,6 +190,9 @@ export class RbacService {
     if (!hasRole) {
       user.roles.push(role);
       await this.userRepository.save(user);
+
+      // Invalidate user cache after role assignment
+      await this.cacheService.invalidateUserCache(userId);
     }
 
     return user;
@@ -206,28 +211,47 @@ export class RbacService {
     if (user.roles) {
       user.roles = user.roles.filter((r) => r.id !== roleId);
       await this.userRepository.save(user);
+
+      // Invalidate user cache after role removal
+      await this.cacheService.invalidateUserCache(userId);
     }
 
     return user;
   }
 
   async getUserRoles(userId: string): Promise<Role[]> {
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['roles', 'roles.permissions'],
-    });
+    const cacheKey = this.cacheService.getUserRolesCacheKey(userId);
 
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
-    }
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const user = await this.userRepository.findOne({
+          where: { id: userId },
+          relations: ['roles', 'roles.permissions'],
+        });
 
-    return user.roles || [];
+        if (!user) {
+          throw new NotFoundException(`User with ID ${userId} not found`);
+        }
+
+        return user.roles || [];
+      },
+      300 // 5 minutes cache
+    );
   }
 
   async getUserPermissions(userId: string): Promise<string[]> {
-    const roles = await this.getUserRoles(userId);
-    const permissions = roles.flatMap((role) => role.permissions?.map((p) => p.name) || []);
-    return [...new Set(permissions)]; // Remove duplicates
+    const cacheKey = this.cacheService.getUserPermissionsCacheKey(userId);
+
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const roles = await this.getUserRoles(userId);
+        const permissions = roles.flatMap((role) => role.permissions?.map((p) => p.name) || []);
+        return [...new Set(permissions)]; // Remove duplicates
+      },
+      300 // 5 minutes cache
+    );
   }
 
   // Utility Methods
