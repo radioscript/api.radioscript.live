@@ -21,14 +21,14 @@ import { CacheService } from './cache.service';
             port: configService.get('REDIS_PORT', 6379),
             password: configService.get('REDIS_PASSWORD'),
             db: configService.get('REDIS_DB', 0),
-            ttl: configService.get('CACHE_TTL', 300), // 5 minutes default
-            max: configService.get('CACHE_MAX_ITEMS', 1000),
+            ttl: configService.get('REDIS_CACHE_TTL', 300), // 5 minutes default
+            max: configService.get('REDIS_CACHE_MAX_ITEMS', 1000),
           };
         } else {
           // Use in-memory cache for development
           return {
-            ttl: configService.get('CACHE_TTL', 300), // 5 minutes default
-            max: configService.get('CACHE_MAX_ITEMS', 100),
+            ttl: configService.get('REDIS_CACHE_TTL', 300), // 5 minutes default
+            max: configService.get('REDIS_CACHE_MAX_ITEMS', 100),
           };
         }
       },
