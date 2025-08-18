@@ -47,7 +47,6 @@ export class SeedService implements OnModuleInit {
       if (!existingRole) {
         const role = this.roleRepository.create(roleData);
         await this.roleRepository.save(role);
-        console.log(`Created role: ${roleData.name}`);
       }
     }
   }
@@ -115,7 +114,6 @@ export class SeedService implements OnModuleInit {
       if (!existingPermission) {
         const permission = this.permissionRepository.create(permissionData);
         await this.permissionRepository.save(permission);
-        console.log(`Created permission: ${permissionData.name}`);
       }
     }
   }
@@ -131,7 +129,6 @@ export class SeedService implements OnModuleInit {
     if (superAdminRole && !superAdminRole.permissions?.length) {
       superAdminRole.permissions = allPermissions;
       await this.roleRepository.save(superAdminRole);
-      console.log('Assigned all permissions to super-admin role');
     }
 
     // Admin gets most permissions (excluding super-admin specific ones)
@@ -146,7 +143,6 @@ export class SeedService implements OnModuleInit {
     if (adminRole && !adminRole.permissions?.length) {
       adminRole.permissions = adminPermissions;
       await this.roleRepository.save(adminRole);
-      console.log('Assigned admin permissions to admin role');
     }
 
     // Editor gets content management permissions
@@ -170,7 +166,6 @@ export class SeedService implements OnModuleInit {
     if (editorRole && !editorRole.permissions?.length) {
       editorRole.permissions = editorPermissions;
       await this.roleRepository.save(editorRole);
-      console.log('Assigned editor permissions to editor role');
     }
 
     // User gets basic read permissions
@@ -185,7 +180,6 @@ export class SeedService implements OnModuleInit {
     if (userRole && !userRole.permissions?.length) {
       userRole.permissions = userPermissions;
       await this.roleRepository.save(userRole);
-      console.log('Assigned user permissions to user role');
     }
   }
 }

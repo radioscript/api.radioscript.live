@@ -100,7 +100,6 @@ export class TokenService {
     });
 
     if (!tokenRecord) {
-      console.log('Token not found', { token, payload });
       throw new UnauthorizedException('error.ACCESS_TOKEN_NOT_FOUND');
     }
     if (tokenRecord.access_token_expiration < new Date()) {

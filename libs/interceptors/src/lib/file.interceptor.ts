@@ -12,8 +12,6 @@ export class AppFileInterceptor implements NestInterceptor {
         fileSize: 5 * 1024 * 1024, // 5MB per file
       },
       fileFilter: (req, file, cb) => {
-        console.log(file);
-
         const allowedExtensions = [
           '.pdf',
           '.doc',
