@@ -2,6 +2,7 @@ export * from './lib/base.entity';
 export * from './lib/category.entity';
 export * from './lib/comment.entity';
 export * from './lib/media.entity';
+export * from './lib/meta.entity';
 export * from './lib/otp.entity';
 export * from './lib/permission.entity';
 export * from './lib/post-meta.entity';

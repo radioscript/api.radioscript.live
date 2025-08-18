@@ -41,6 +41,13 @@ env:
 
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
+  REDIS_HOST: ${{ secrets.REDIS_HOST }}
+  REDIS_PORT: ${{ secrets.REDIS_PORT }}
+  REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+  REDIS_DB: ${{ secrets.REDIS_DB }}
+  REDIS_CACHE_TTL: ${{ secrets.REDIS_CACHE_TTL }}
+  REDIS_CACHE_MAX_ITEMS: ${{ secrets.REDIS_CACHE_MAX_ITEMS }}
+
   SERVER_IP: ${{ secrets.SERVER_IP }}
   SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
 

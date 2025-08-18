@@ -19,6 +19,7 @@
       "@/categories": ["features/categories/src/index.ts"],
       "@/comments": ["features/comments/src/index.ts"],
       "@/constants": ["libs/constants/src/index.ts"],
+      "@/dashboard": ["features/dashboard/src/index.ts"],
       "@/database": ["libs/database/src/index.ts"],
       "@/decorators": ["libs/decorators/src/index.ts"],
       "@/dtos": ["libs/dtos/src/index.ts"],
@@ -43,7 +44,7 @@
       "@/token": ["features/token/src/index.ts"],
       "@/types": ["libs/types/src/index.ts"],
       "@/users": ["features/users/src/index.ts"],
-      "@/dashboard": ["features/dashboard/src/index.ts"]
+      "@/cache": ["libs/cache/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

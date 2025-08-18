@@ -7,10 +7,10 @@ export class CreatePostMetaDto {
   @ApiProperty()
   postId: string;
 
-  @IsString()
+  @IsUUID()
   @IsNotEmpty()
   @ApiProperty()
-  key: string;
+  metaId: string;
 
   @IsOptional()
   @IsString()
@@ -19,9 +19,9 @@ export class CreatePostMetaDto {
 }
 
 export class CreatePostMetaNestedDto {
-  @IsString()
+  @IsUUID()
   @IsNotEmpty()
-  key: string;
+  metaId: string;
 
   @IsOptional()
   @IsString()

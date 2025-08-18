@@ -1,4 +1,5 @@
 import { AuthModule } from '@/auth';
+import { CacheModule } from '@/cache';
 import { CategoryModule } from '@/categories';
 import { CommentModule } from '@/comments';
 import { DashboardModule } from '@/dashboard';
@@ -27,6 +28,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     AuthModule,
+    CacheModule,
     CategoryModule,
     DatabaseModule,
     CommentModule,

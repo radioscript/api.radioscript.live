@@ -1,4 +1,4 @@
-import { Category, Media, Post, PostMeta, Tag, User } from '@/entities';
+import { Category, Media, Meta, Post, PostMeta, Tag, User } from '@/entities';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -11,6 +11,7 @@ export class PostService {
   constructor(
     @InjectRepository(Post) private readonly postRepo: Repository<Post>,
     @InjectRepository(PostMeta) private readonly postMeta: Repository<PostMeta>,
+    @InjectRepository(Meta) private readonly metaDefRepo: Repository<Meta>,
     @InjectRepository(Category) private readonly categoryRepo: Repository<Category>,
     @InjectRepository(Tag) private readonly tagRepo: Repository<Tag>,
     @InjectRepository(Media) private readonly mediaRepo: Repository<Media>,
@@ -40,11 +41,18 @@ export class PostService {
     }
 
     if (dto.meta?.length) {
-      post.meta = dto.meta.map((m) => {
-        const pm = this.postMeta.create({ key: m.key, value: m.value });
-        pm.post = post; // حتماً اینجا رابطه رو ست می‌کنیم
-        return pm;
-      });
+      post.meta = await Promise.all(
+        dto.meta.map(async (m) => {
+          const metaDef = await this.metaDefRepo.findOneByOrFail({ id: m.metaId });
+          const pm = this.postMeta.create({
+            metaId: m.metaId,
+            value: m.value,
+            meta: metaDef,
+            post: post,
+          });
+          return pm;
+        })
+      );
     }
 
     return this.postRepo.save(post);
