@@ -17,6 +17,7 @@ import { PostModule } from '@/posts';
 import { RolesModule } from '@/roles';
 import { SmsModule } from '@/sms';
 import { TagModule } from '@/tags';
+import { TokenModule } from '@/token';
 import { UserModule } from '@/users';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
@@ -44,6 +45,7 @@ import { AppService } from './app.service';
     RolesModule,
     SmsModule,
     TagModule,
+    TokenModule,
     UserModule,
     DashboardModule,
     DonationsModule,
