@@ -3,7 +3,6 @@ import { JwtAuthGuard, RolesGuard } from '@/guards';
 import { EncryptionService, OtpService } from '@/helpers';
 import { MailModule } from '@/mail';
 import { SmsModule } from '@/sms';
-import { TokenModule } from '@/token';
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,7 +10,7 @@ import { UserController } from './users.controller';
 import { UserService } from './users.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token, Role, Permission]), SmsModule, MailModule, TokenModule],
+  imports: [TypeOrmModule.forFeature([User, Token, Role, Permission]), SmsModule, MailModule],
   controllers: [UserController],
   providers: [UserService, EncryptionService, OtpService, JwtAuthGuard, RolesGuard, JwtService],
   exports: [UserService],

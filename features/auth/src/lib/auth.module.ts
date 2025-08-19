@@ -5,7 +5,6 @@ import { DeviceInterceptor } from '@/interceptors';
 import { OtpModule } from '@/otp';
 import { SmsModule } from '@/sms';
 import { GithubStrategy, GoogleStrategy, JwtStrategy, RefreshTokenStrategy } from '@/strategies';
-import { TokenModule } from '@/token';
 import { UserModule } from '@/users';
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -15,7 +14,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
-  imports: [UserModule, PassportModule, SmsModule, TokenModule, OtpModule, TypeOrmModule.forFeature([User, Role, Permission])],
+  imports: [UserModule, PassportModule, SmsModule, OtpModule, TypeOrmModule.forFeature([User, Role, Permission])],
 
   controllers: [AuthController],
   providers: [AuthService, EncryptionService, DeviceInterceptor, JwtService, RolesGuard, JwtAuthGuard, S3Service, CookieService, JwtStrategy, RefreshTokenStrategy, GoogleStrategy, GithubStrategy],
