@@ -1,6 +1,7 @@
 export * from './lib/auth';
 export * from './lib/category';
 export * from './lib/comment';
+export * from './lib/donation';
 export * from './lib/media';
 export * from './lib/otp';
 export * from './lib/post';

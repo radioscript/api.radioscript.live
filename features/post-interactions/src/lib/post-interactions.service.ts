@@ -87,7 +87,7 @@ export class PostInteractionsService {
     await this.postViewRepo.save(view);
   }
 
-  async updateViewDuration(req: Request, postId: string, viewDuration: number, isCompleted: boolean = false): Promise<void> {
+  async updateViewDuration(req: Request, postId: string, viewDuration: number, isCompleted = false): Promise<void> {
     const userId = req['user']?.['sub'];
     const sessionId = req.headers['session-id'] as string;
 
@@ -143,8 +143,8 @@ export class PostInteractionsService {
 
   async getUserLikedPosts(
     req: Request,
-    page: number = 1,
-    limit: number = 10
+    page = 1,
+    limit = 10
   ): Promise<{
     posts: Post[];
     total: number;

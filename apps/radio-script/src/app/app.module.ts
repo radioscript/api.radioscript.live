@@ -4,6 +4,7 @@ import { CategoryModule } from '@/categories';
 import { CommentModule } from '@/comments';
 import { DashboardModule } from '@/dashboard';
 import { DatabaseModule } from '@/database';
+import { DonationsModule } from '@/donations';
 import { EnvironmentModule } from '@/environments';
 import { HealthModule } from '@/health';
 import { EncryptionService, OtpService } from '@/helpers';
@@ -47,6 +48,7 @@ import { AppService } from './app.service';
     TokenModule,
     UserModule,
     DashboardModule,
+    DonationsModule,
     ThrottlerModule.forRoot([
       {
         ttl: 60000,

@@ -4,6 +4,7 @@ import { UserRole } from '@/enums';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from './base.entity';
 import { Comment } from './comment.entity';
+import { Donation } from './donation.entity';
 import { Media } from './media.entity';
 import { PostLike } from './post-like.entity';
 import { PostView } from './post-view.entity';
@@ -79,6 +80,10 @@ export class User extends BaseEntity {
   @Exclude()
   @OneToMany(() => PostView, (view) => view.user)
   postViews: PostView[];
+
+  @Exclude()
+  @OneToMany(() => Donation, (donation) => donation.user)
+  donations: Donation[];
 
   @Column({ nullable: true, default: false })
   blocked: boolean;

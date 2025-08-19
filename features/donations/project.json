@@ -1,0 +1,23 @@
+{
+  "name": "donations",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/donations/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/features/donations",
+        "main": "features/donations/src/index.ts",
+        "tsConfig": "features/donations/tsconfig.lib.json",
+        "assets": ["features/donations/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": ["npm:public"]
+}

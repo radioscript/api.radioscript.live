@@ -20,6 +20,7 @@
       "@/comments": ["features/comments/src/index.ts"],
       "@/constants": ["libs/constants/src/index.ts"],
       "@/dashboard": ["features/dashboard/src/index.ts"],
+      "@/donations": ["features/donations/src/index.ts"],
       "@/database": ["libs/database/src/index.ts"],
       "@/decorators": ["libs/decorators/src/index.ts"],
       "@/dtos": ["libs/dtos/src/index.ts"],
