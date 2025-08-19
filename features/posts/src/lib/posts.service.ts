@@ -1,4 +1,4 @@
-import { Category, Media, Meta, Post, PostMeta, Tag, User } from '@/entities';
+import { Category, Media, Meta, Post, PostLike, PostMeta, PostView, Tag, User } from '@/entities';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -15,7 +15,9 @@ export class PostService {
     @InjectRepository(Category) private readonly categoryRepo: Repository<Category>,
     @InjectRepository(Tag) private readonly tagRepo: Repository<Tag>,
     @InjectRepository(Media) private readonly mediaRepo: Repository<Media>,
-    @InjectRepository(User) private readonly userRepo: Repository<User>
+    @InjectRepository(User) private readonly userRepo: Repository<User>,
+    @InjectRepository(PostLike) private readonly postLikeRepo: Repository<PostLike>,
+    @InjectRepository(PostView) private readonly postViewRepo: Repository<PostView>
   ) {}
 
   async create(req: Request, dto: CreatePostDto): Promise<Post> {
@@ -88,12 +90,44 @@ export class PostService {
       take: limit,
     });
 
-    return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
+    // Add statistics for each post
+    const postsWithStats = await Promise.all(
+      data.map(async (post) => {
+        const [likeCount, viewCount, playCount] = await Promise.all([
+          this.postLikeRepo.count({ where: { postId: post.id } }),
+          this.postViewRepo.count({ where: { postId: post.id } }),
+          this.postViewRepo.count({ where: { postId: post.id, isCompleted: true } }),
+        ]);
+
+        post.likeCount = likeCount;
+        post.viewCount = viewCount;
+        post.playCount = playCount;
+
+        return post;
+      })
+    );
+
+    return { data: postsWithStats, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string): Promise<Post> {
-    const post = await this.postRepo.findOne({ where: { id } });
+    const post = await this.postRepo.findOne({
+      where: { id },
+      relations: ['categories', 'tags', 'author', 'featuredImage', 'meta'],
+    });
     if (!post) throw new NotFoundException('Post not found');
+
+    // Add statistics
+    const [likeCount, viewCount, playCount] = await Promise.all([
+      this.postLikeRepo.count({ where: { postId: id } }),
+      this.postViewRepo.count({ where: { postId: id } }),
+      this.postViewRepo.count({ where: { postId: id, isCompleted: true } }),
+    ]);
+
+    post.likeCount = likeCount;
+    post.viewCount = viewCount;
+    post.playCount = playCount;
+
     return post;
   }
 

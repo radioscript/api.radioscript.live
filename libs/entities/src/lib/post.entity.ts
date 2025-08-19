@@ -3,7 +3,9 @@ import { BaseEntity } from './base.entity';
 import { Category } from './category.entity';
 import { Comment } from './comment.entity';
 import { Media } from './media.entity';
+import { PostLike } from './post-like.entity';
 import { PostMeta } from './post-meta.entity';
+import { PostView } from './post-view.entity';
 import { Tag } from './tag.entity';
 import { User } from './user.entity';
 
@@ -62,4 +64,15 @@ export class Post extends BaseEntity {
 
   @OneToMany(() => PostMeta, (meta) => meta.post, { cascade: true, eager: true })
   meta: PostMeta[];
+
+  @OneToMany(() => PostLike, (like) => like.post, { cascade: true })
+  likes: PostLike[];
+
+  @OneToMany(() => PostView, (view) => view.post, { cascade: true })
+  views: PostView[];
+
+  // Virtual properties for counts
+  likeCount?: number;
+  viewCount?: number;
+  playCount?: number; // تعداد پخش برای پادکست‌ها
 }

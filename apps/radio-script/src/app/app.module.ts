@@ -10,6 +10,7 @@ import { EncryptionService, OtpService } from '@/helpers';
 import { MailModule } from '@/mail';
 import { MediaModule } from '@/media';
 import { OtpModule } from '@/otp';
+import { PostInteractionsModule } from '@/post-interactions';
 import { PostMetaModule } from '@/post-meta';
 import { PostModule } from '@/posts';
 import { RolesModule } from '@/roles';
@@ -37,6 +38,7 @@ import { AppService } from './app.service';
     MailModule,
     MediaModule,
     OtpModule,
+    PostInteractionsModule,
     PostModule,
     PostMetaModule,
     RolesModule,

@@ -35,6 +35,7 @@
       "@/mail": ["features/mail/src/index.ts"],
       "@/media": ["features/media/src/index.ts"],
       "@/otp": ["features/otp/src/index.ts"],
+      "@/post-interactions": ["features/post-interactions/src/index.ts"],
       "@/post-meta": ["features/post-meta/src/index.ts"],
       "@/posts": ["features/posts/src/index.ts"],
       "@/roles": ["features/roles/src/index.ts"],

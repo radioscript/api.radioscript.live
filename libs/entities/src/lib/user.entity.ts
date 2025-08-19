@@ -5,6 +5,8 @@ import { Exclude } from 'class-transformer';
 import { BaseEntity } from './base.entity';
 import { Comment } from './comment.entity';
 import { Media } from './media.entity';
+import { PostLike } from './post-like.entity';
+import { PostView } from './post-view.entity';
 import { Post } from './post.entity';
 import { Role } from './role.entity';
 import { Token } from './token.entity';
@@ -69,6 +71,14 @@ export class User extends BaseEntity {
   @Exclude()
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
+
+  @Exclude()
+  @OneToMany(() => PostLike, (like) => like.user)
+  postLikes: PostLike[];
+
+  @Exclude()
+  @OneToMany(() => PostView, (view) => view.user)
+  postViews: PostView[];
 
   @Column({ nullable: true, default: false })
   blocked: boolean;

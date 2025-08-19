@@ -1,0 +1,23 @@
+{
+  "name": "post-interactions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/post-interactions/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/features/post-interactions",
+        "main": "features/post-interactions/src/index.ts",
+        "tsConfig": "features/post-interactions/tsconfig.lib.json",
+        "assets": ["features/post-interactions/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": ["npm:public"]
+}
