@@ -4,6 +4,8 @@ export * from './lib/comment';
 export * from './lib/media';
 export * from './lib/otp';
 export * from './lib/post';
+export * from './lib/post-like';
 export * from './lib/post-meta';
+export * from './lib/post-view';
 export * from './lib/tag';
 export * from './lib/user';
