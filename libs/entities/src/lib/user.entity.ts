@@ -12,7 +12,7 @@ import { Post } from './post.entity';
 import { Role } from './role.entity';
 import { Token } from './token.entity';
 
-@Entity()
+@Entity('users')
 @Index(['email'], { where: 'deleted_at IS NULL' }) // Partial index for email
 @Index(['phone_number'], { where: 'deleted_at IS NULL' }) // Partial index for phone
 export class User extends BaseEntity {

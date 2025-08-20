@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { User } from './user.entity';
 
-@Entity()
+@Entity('tokens')
 export class Token extends BaseEntity {
   @Column()
   access_token: string;

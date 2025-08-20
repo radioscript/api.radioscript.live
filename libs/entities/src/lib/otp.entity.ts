@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
-@Entity()
+@Entity('otps')
 export class Otp extends BaseEntity {
   @Column({ unique: true })
   recipient: string;
