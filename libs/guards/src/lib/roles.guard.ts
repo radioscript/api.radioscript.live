@@ -47,15 +47,9 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException(this.i18n.t('error.UNAUTHORIZED'));
     }
 
-    // Check legacy enum role (backward compatibility)
-    const hasLegacyRole = requiredRoles?.some((role) => {
-      if (typeof role === 'string') return role === foundUser.role;
-      return role === foundUser.role;
-    });
-
     // Check database roles
     const userRoleNames = foundUser.roles?.map((role) => role.name) || [];
-    const hasDbRole = requiredRoles?.some((role) => {
+    const hasRole = requiredRoles?.some((role) => {
       const roleName = typeof role === 'string' ? role : String(role);
       return userRoleNames.includes(roleName);
     });
@@ -65,7 +59,7 @@ export class RolesGuard implements CanActivate {
     const hasPermission = requiredPermissions?.some((permission) => userPermissions.includes(permission));
 
     // User must have at least one required role OR one required permission
-    const hasAccess = hasLegacyRole || hasDbRole || hasPermission;
+    const hasAccess = hasRole || hasPermission;
 
     if (!hasAccess) {
       throw new ForbiddenException(this.i18n.t('error.FORBIDDEN'));

@@ -1,6 +1,6 @@
 import { ChangePasswordDto, ForgotPasswordDto, GoogleOneTapDto, IdentityDto, LoginDto, LoginOtpDto, OtpDto, RegisterDto, UpdateEmailDto, UpdatePhoneNumberDto, UpdateProfileDto } from '@/dtos';
 import { User } from '@/entities';
-import { UserRole } from '@/enums';
+
 import { EncryptionService, S3Service } from '@/helpers';
 import { DeviceInfo } from '@/interfaces';
 import { OtpService } from '@/otp';
@@ -104,11 +104,16 @@ export class AuthService {
   async panelLogin({ email, phone_number, password }: LoginDto, deviceInfo: DeviceInfo) {
     const existingUser = await this.userRepository.findOne({
       where: [{ email }, { phone_number }],
+      relations: ['roles'],
     });
     if (!existingUser) {
       throw new NotFoundException('error.USER_NOT_FOUND');
     }
-    if (existingUser.role.includes(UserRole.USER)) {
+    // Check if user has admin or super-admin role
+    const userRoles = existingUser.roles?.map((role) => role.name) || [];
+    const hasAdminRole = userRoles.some((role) => role === 'admin' || role === 'super-admin');
+
+    if (!hasAdminRole) {
       throw new ForbiddenException('error.FORBIDDEN');
     }
     const isValidPassword = await this.encryptionService.compare(password, existingUser.password);

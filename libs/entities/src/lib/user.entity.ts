@@ -1,6 +1,5 @@
 import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 
-import { UserRole } from '@/enums';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from './base.entity';
 import { Comment } from './comment.entity';
@@ -41,13 +40,6 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true, length: 500 })
   bio: string;
-
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
-  })
-  role: UserRole;
 
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({
