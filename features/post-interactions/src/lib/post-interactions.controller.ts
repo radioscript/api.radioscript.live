@@ -1,6 +1,6 @@
 import { CreatePostLikeDto, CreatePostViewDto } from '@/dtos';
 import { JwtAuthGuard } from '@/guards';
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { PostInteractionsService } from './post-interactions.service';
 
@@ -25,7 +25,7 @@ export class PostInteractionsController {
     return this.postInteractionsService.recordView(req, dto);
   }
 
-  @Post('view/:postId/duration')
+  @Put('view/:postId/duration')
   async updateViewDuration(@Req() req: Request, @Param('postId') postId: string, @Body() body: { viewDuration: number; isCompleted?: boolean }) {
     return this.postInteractionsService.updateViewDuration(req, postId, body.viewDuration, body.isCompleted);
   }

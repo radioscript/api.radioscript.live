@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsIn, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsBoolean, IsEmail, IsIn, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
 
 export class CreateDonationDto {
   @IsOptional()
@@ -23,6 +23,7 @@ export class CreateDonationDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(255)
   message?: string;
 
   @IsOptional()

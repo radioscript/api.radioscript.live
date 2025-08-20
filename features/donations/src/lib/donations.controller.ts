@@ -30,18 +30,18 @@ export class DonationsController {
   }
 
   @Get('recent')
-  async getRecentDonations(@Query('limit') limit: string = '10') {
+  async getRecentDonations(@Query('limit') limit = '10') {
     return this.donationsService.getRecentDonations(parseInt(limit));
   }
 
   @Get('top-donors')
-  async getTopDonors(@Query('limit') limit: string = '10') {
+  async getTopDonors(@Query('limit') limit = '10') {
     return this.donationsService.getTopDonors(parseInt(limit));
   }
 
   @Get('my-donations')
   @UseGuards(JwtAuthGuard)
-  async getUserDonations(@Req() req: Request, @Query('page') page: string = '1', @Query('limit') limit: string = '10') {
+  async getUserDonations(@Req() req: Request, @Query('page') page = '1', @Query('limit') limit = '10') {
     return this.donationsService.getUserDonations(req, parseInt(page), parseInt(limit));
   }
 

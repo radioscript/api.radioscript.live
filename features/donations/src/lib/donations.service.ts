@@ -135,7 +135,7 @@ export class DonationsService {
     };
   }
 
-  async getUserDonations(req: Request, page: number = 1, limit: number = 10) {
+  async getUserDonations(req: Request, page = 1, limit = 10) {
     const userId = (req['user'] as any).sub;
 
     const [data, total] = await this.donationRepo.findAndCount({
@@ -155,7 +155,7 @@ export class DonationsService {
     };
   }
 
-  async getRecentDonations(limit: number = 10) {
+  async getRecentDonations(limit = 10) {
     return this.donationRepo.find({
       where: { paymentStatus: 'completed' },
       relations: ['user'],
@@ -164,7 +164,7 @@ export class DonationsService {
     });
   }
 
-  async getTopDonors(limit: number = 10) {
+  async getTopDonors(limit = 10) {
     return this.donationRepo
       .createQueryBuilder('donation')
       .select('donation.donorName', 'donorName')
