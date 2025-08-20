@@ -1,3 +1,4 @@
+import { CacheService } from '@/cache';
 import { ChangePasswordDto, ForgotPasswordDto, GoogleOneTapDto, IdentityDto, LoginDto, LoginOtpDto, OtpDto, RegisterDto, UpdateEmailDto, UpdatePhoneNumberDto, UpdateProfileDto } from '@/dtos';
 import { User } from '@/entities';
 
@@ -23,7 +24,8 @@ export class AuthService {
     private readonly encryptionService: EncryptionService,
     private tokenService: TokenService,
     private configService: ConfigService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private readonly cacheService: CacheService
   ) {}
 
   async identityVerification({ email, phone_number }: IdentityDto) {
@@ -104,11 +106,12 @@ export class AuthService {
   async panelLogin({ email, phone_number, password }: LoginDto, deviceInfo: DeviceInfo) {
     const existingUser = await this.userRepository.findOne({
       where: [{ email }, { phone_number }],
-      relations: ['roles'],
+      relations: ['roles', 'roles.permissions'],
     });
     if (!existingUser) {
       throw new NotFoundException('error.USER_NOT_FOUND');
     }
+
     // Check if user has admin or super-admin role
     const userRoles = existingUser.roles?.map((role) => role.name) || [];
     const hasAdminRole = userRoles.some((role) => role === 'admin' || role === 'super-admin');
@@ -116,15 +119,26 @@ export class AuthService {
     if (!hasAdminRole) {
       throw new ForbiddenException('error.FORBIDDEN');
     }
+
     const isValidPassword = await this.encryptionService.compare(password, existingUser.password);
 
     if (!password || !isValidPassword) {
       throw new BadRequestException('error.INVALID_PASSWORD');
     }
 
+    // Get user roles and permissions with caching
+    const roles = await this.getUserRoles(existingUser.id);
+    const permissions = await this.getUserPermissions(existingUser.id);
+
     const token = await this.createToken(existingUser, deviceInfo);
     const profile = await this.getProfile(existingUser.id);
-    return { ...token, ...profile };
+
+    return {
+      ...token,
+      ...profile,
+      roles,
+      permissions,
+    };
   }
 
   async sendOtp({ email, phone_number }: OtpDto) {
@@ -383,5 +397,55 @@ export class AuthService {
   private createSocialCallbackUrl(access_token: string, refresh_token: string, provider: SocialLoginProvider) {
     const redirectUrl = this.configService.getOrThrow<string>('SOCIAL_AUTH_FRONT_END_CALLBACK_URL');
     return `${redirectUrl}?access_token=${access_token}&refresh_token=${refresh_token}&provider=${provider}`;
+  }
+
+  /**
+   * Get user roles with caching
+   */
+  async getUserRoles(userId: string): Promise<string[]> {
+    const cacheKey = this.cacheService.getUserRolesCacheKey(userId);
+
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const user = await this.userRepository.findOne({
+          where: { id: userId },
+          relations: ['roles'],
+        });
+
+        if (!user) {
+          return [];
+        }
+
+        return user.roles?.map((role) => role.name) || [];
+      },
+      300 // 5 minutes cache
+    );
+  }
+
+  /**
+   * Get user permissions with caching
+   */
+  async getUserPermissions(userId: string): Promise<string[]> {
+    const cacheKey = this.cacheService.getUserPermissionsCacheKey(userId);
+
+    return this.cacheService.getOrSet(
+      cacheKey,
+      async () => {
+        const user = await this.userRepository.findOne({
+          where: { id: userId },
+          relations: ['roles', 'roles.permissions'],
+        });
+
+        if (!user) {
+          return [];
+        }
+
+        const permissions = user.roles?.flatMap((role) => role.permissions?.map((p) => p.name) || []) || [];
+
+        return [...new Set(permissions)]; // Remove duplicates
+      },
+      300 // 5 minutes cache
+    );
   }
 }

@@ -34,10 +34,6 @@ export class UpdateUserDto {
   @IsOptional()
   phone_number?: string;
 
-  @IsString()
-  @IsOptional()
-  role?: string;
-
   @IsBoolean()
   @IsOptional()
   blocked?: boolean;

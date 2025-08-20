@@ -1,6 +1,7 @@
 import { avatarMulterOptions } from '@/constants';
+import { Permissions, Roles } from '@/decorators';
 import { ChangePasswordDto, ForgotPasswordDto, GoogleOneTapDto, IdentityDto, LoginDto, LoginOtpDto, OtpDto, RegisterDto, UpdateEmailDto, UpdatePhoneNumberDto, UpdateProfileDto } from '@/dtos';
-import { JwtAuthGuard, RefreshTokenGuard } from '@/guards';
+import { JwtAuthGuard, RefreshTokenGuard, RolesGuard } from '@/guards';
 import { CookieService } from '@/helpers';
 import { DeviceInterceptor } from '@/interceptors';
 import { Body, Controller, Delete, Get, Patch, Post, Put, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
@@ -33,11 +34,11 @@ export class AuthController {
     return user;
   }
 
-  @Post('panel-login')
-  async panelLogin(@Body() loginDto: LoginDto, @Req() request: Request, @Res({ passthrough: true }) res: Response) {
-    const user = await this.authService.panelLogin(loginDto, request['deviceInfo']);
-    await this.cookieService.setResponseTokenCookies(res, user.access_token, user.refresh_token);
-    return user;
+  @Post('panel/login')
+  @UseInterceptors(DeviceInterceptor)
+  async panelLogin(@Body() loginDto: LoginDto, @Req() request: Request) {
+    const deviceInfo = request['deviceInfo'];
+    return await this.authService.panelLogin(loginDto, deviceInfo);
   }
 
   @Post('login-otp')
@@ -159,5 +160,21 @@ export class AuthController {
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     await this.cookieService.deleteResponseTokenCookies(res);
     return await this.authService.logout(req);
+  }
+
+  @Get('panel/me/permissions')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super-admin')
+  @Permissions('dashboard.access')
+  async getMyPermissions(@Req() request: Request) {
+    const userId = request.user?.['sub'] || request.user?.['user_id'] || request.user?.['id'];
+    const roles = await this.authService.getUserRoles(userId);
+    const permissions = await this.authService.getUserPermissions(userId);
+
+    return {
+      userId,
+      roles,
+      permissions,
+    };
   }
 }
