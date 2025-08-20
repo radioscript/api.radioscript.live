@@ -60,7 +60,7 @@ export class PostInteractionsService {
 
   // View functionality
   async recordView(req: Request, dto: CreatePostViewDto): Promise<void> {
-    const { postId, sessionId, viewDuration, isCompleted } = dto;
+    const { postId, viewerId, viewDuration, isCompleted } = dto;
     const userId = req['user']?.['sub'];
     const ipAddress = req.ip || req.connection.remoteAddress;
     const userAgent = req.get('User-Agent');
@@ -71,13 +71,16 @@ export class PostInteractionsService {
       throw new NotFoundException('Post not found');
     }
 
+    // Determine viewer ID: use userId if logged in, otherwise use viewerId from DTO
+    const finalViewerId = userId || viewerId;
+
     // Create view record
     const view = this.postViewRepo.create({
       postId,
       userId,
       ipAddress,
       userAgent,
-      sessionId,
+      viewerId: finalViewerId,
       viewDuration: viewDuration || 0,
       isCompleted: isCompleted || false,
       post,
@@ -89,15 +92,15 @@ export class PostInteractionsService {
 
   async updateViewDuration(req: Request, postId: string, viewDuration: number, isCompleted = false): Promise<void> {
     const userId = req['user']?.['sub'];
-    const sessionId = req.headers['session-id'] as string;
+    const viewerId = req.headers['viewer-id'] as string;
 
     const whereCondition: any = { postId };
     if (userId) {
       whereCondition.userId = userId;
-    } else if (sessionId) {
-      whereCondition.sessionId = sessionId;
+    } else if (viewerId) {
+      whereCondition.viewerId = viewerId;
     } else {
-      throw new NotFoundException('User ID or session ID required');
+      throw new NotFoundException('User ID or viewer ID required');
     }
 
     const view = await this.postViewRepo.findOne({ where: whereCondition });
@@ -125,10 +128,10 @@ export class PostInteractionsService {
       where: { postId, isCompleted: true },
     });
 
-    // Count unique viewers (by user ID or session ID)
+    // Count unique viewers (by user ID or viewer ID)
     const uniqueViewers = await this.postViewRepo
       .createQueryBuilder('view')
-      .select('COUNT(DISTINCT COALESCE(view.userId, view.sessionId))', 'count')
+      .select('COUNT(DISTINCT COALESCE(view.userId, view.viewerId))', 'count')
       .where('view.postId = :postId', { postId })
       .getRawOne()
       .then((result) => parseInt(result.count) || 0);

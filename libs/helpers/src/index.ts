@@ -4,3 +4,4 @@ export * from './lib/helpers';
 export * from './lib/otp.service';
 export * from './lib/s3.service';
 export * from './lib/swagger';
+export * from './lib/viewer.helper';

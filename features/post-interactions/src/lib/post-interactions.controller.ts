@@ -37,7 +37,7 @@ export class PostInteractionsController {
 
   @Get('liked-posts')
   @UseGuards(JwtAuthGuard)
-  async getUserLikedPosts(@Req() req: Request, @Query('page') page: string = '1', @Query('limit') limit: string = '10') {
+  async getUserLikedPosts(@Req() req: Request, @Query('page') page = '1', @Query('limit') limit = '10') {
     return this.postInteractionsService.getUserLikedPosts(req, parseInt(page), parseInt(limit));
   }
 }

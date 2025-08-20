@@ -6,7 +6,7 @@ export class CreatePostViewDto {
 
   @IsOptional()
   @IsString()
-  sessionId?: string;
+  viewerId?: string; // userId for logged users, guest-{uuid} for anonymous users
 
   @IsOptional()
   @IsNumber()

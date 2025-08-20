@@ -37,8 +37,8 @@ export class Donation extends BaseEntity {
   @Column({ name: 'user_agent', nullable: true })
   userAgent?: string;
 
-  @Column({ name: 'session_id', nullable: true })
-  sessionId?: string;
+  @Column({ name: 'viewer_id', nullable: true })
+  viewerId?: string; // userId for logged users, guest-{uuid} for anonymous users
 
   @Column({ name: 'message', type: 'text', nullable: true })
   message?: string;
