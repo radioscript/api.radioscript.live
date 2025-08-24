@@ -89,8 +89,10 @@ export class AuthController {
   }
 
   @Patch('change-password')
-  async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Req() request: Request) {
-    return this.authService.changePassword(changePasswordDto, request['deviceInfo']);
+  async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Req() request: Request, @Res({ passthrough: true }) res: Response) {
+    const data = await this.authService.changePassword(changePasswordDto, request['deviceInfo']);
+    await this.cookieService.setResponseTokenCookies(res, data.access_token, data.refresh_token);
+    return data;
   }
 
   @Post('send-otp')

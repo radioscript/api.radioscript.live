@@ -20,5 +20,6 @@
   "UNAUTHORIZED": "Unauthorized",
   "FORBIDDEN": "Forbidden",
   "ACCESS_TOKEN_NOT_FOUND": "Access token not found",
-  "ACCESS_TOKEN_INVALID": "Access token is invalid"
+  "ACCESS_TOKEN_INVALID": "Access token is invalid",
+  "PASSWORD_NOT_MATCH": "Password and password confirmation do not match"
 }

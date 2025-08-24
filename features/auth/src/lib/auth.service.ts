@@ -256,7 +256,7 @@ export class AuthService {
     return { message: this.i18nService.t('info.OTP_SENT') };
   }
 
-  async changePassword({ email, phone_number, otp, password }: ChangePasswordDto, deviceInfo: DeviceInfo) {
+  async changePassword({ email, phone_number, otp, password, passwordConfirm }: ChangePasswordDto, deviceInfo: DeviceInfo) {
     const recipient = email ? email : phone_number;
 
     const existingUser = await this.userRepository.findOne({
@@ -266,6 +266,9 @@ export class AuthService {
       throw new NotFoundException('error.USER_NOT_FOUND');
     }
 
+    if (password !== passwordConfirm) {
+      throw new BadRequestException('error.PASSWORD_NOT_MATCH');
+    }
     await this.otpService.verifyOtp(otp, recipient);
 
     const hashedPassword = await this.encryptionService.hash(password);

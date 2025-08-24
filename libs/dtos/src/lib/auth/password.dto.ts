@@ -25,11 +25,15 @@ export class ChangePasswordDto {
   @IsPhoneNumber("IR", { message: "شماره موبایل معتبر نیست" })
   phone_number: string;
 
-  @IsNotEmpty({ message: "کلمه‌عبور نباید خالی باشد" })
-  @MinLength(6, { message: "کلمه‌عبور باید حداقل 6 کاراکتر داشته باشد" })
+  @IsNotEmpty({ message: "کلمه عبور نباید خالی باشد" })
+  @MinLength(6, { message: "کلمه عبور باید حداقل 6 کاراکتر داشته باشد" })
   password?: string;
 
-  @IsNotEmpty({ message: "کد یک بار‌مصرف نباید خالی باشد" })
-  @MinLength(4, { message: "کد یک بار‌مصرف باید حداقل 4 کاراکتر داشته باشد" })
+  @IsNotEmpty({ message: "تکرار کلمه عبور نباید خالی باشد" })
+  @MinLength(6, { message: "تکرار کلمه عبور باید حداقل 6 کاراکتر داشته باشد" })
+  passwordConfirm?: string;
+
+  @IsNotEmpty({ message: "کد یک بار مصرف نباید خالی باشد" })
+  @MinLength(4, { message: "کد یک بار مصرف باید حداقل 4 کاراکتر داشته باشد" })
   otp?: string;
 }
