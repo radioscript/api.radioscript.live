@@ -22,7 +22,7 @@ export class CookieService {
 
     const cookieOptions: CookieOptions = {
       priority: 'high',
-      path: '/',
+      path: '/', // برای تمام مسیرها در تمام subdomains
       maxAge: this.maxAge,
       expires: this.expires,
       httpOnly: true,
@@ -30,14 +30,14 @@ export class CookieService {
 
     if (isProduction) {
       cookieOptions.secure = true; // 🔐 only use Secure in production
-      cookieOptions.sameSite = 'none';
+      cookieOptions.sameSite = 'lax'; // 🛡️ محافظت CSRF + اجازه cross-subdomain
       if (!domain) {
         throw new Error('APP_DOMAIN_WILDCARD is not defined in the environment');
       }
-      cookieOptions.domain = domain;
+      cookieOptions.domain = domain; // .radioscript.live
     } else {
       cookieOptions.secure = false; // ❌ Allow HTTP for localhost
-      cookieOptions.sameSite = 'lax'; // ✅ Prevent rejection by browser
+      cookieOptions.sameSite = 'lax'; // 🛡️ محافظت CSRF + اجازه cross-subdomain
       // ⚠ Do not set domain in dev or localhost will reject the cookie
     }
 
